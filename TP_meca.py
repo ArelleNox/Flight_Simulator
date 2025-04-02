@@ -59,7 +59,45 @@ def matrice_rotation(vecteur_rotation):
     print("Matrice de Ry=", matriceRY)
     print("Matrice de Rz=", matriceRZ)
 
-print("Matrice de translation")
-matrice_translation([3, 4, 2])
-matrice_rotation([mt.pi, mt.pi/2, mt.pi/4])
+
+def produit_matrice(A, B):
+    if len(A[0]) != len(B):
+        raise ValueError("Le nombre de colonne de A doit être égale au nombre de ligne de B.")
+    
+    C = [[0 for i in range(len(B[0]))] for j in range(len(A))]
+
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                C[i][j] += A[i][k] * B[k][j]
+
+    print("\n--- Produit de matrices ---")
+    print("A x B = ", C)
+    
+    return C
+
+
 ###INTERFACE
+
+print("Matrice de translation")
+T = [3,4,2]
+matrice_translation(T)
+print(" ")
+
+R = ([mt.pi, mt.pi/2, mt.pi/4])
+matrice_rotation(R)
+
+A = [
+[1, 2, 0, 3],
+[0, 0, 0, 2],
+[1, 2, 1, 5],
+[0, 0, 1, 1]
+]
+B = [
+[0, 0, 3, 0],
+[0, 1, 0, 1],
+[4, 1, 3, 0],
+[1, 2, 1, 0]
+]
+produit_matrice(A,B)
+print(" ")
