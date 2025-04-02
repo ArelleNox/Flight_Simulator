@@ -16,14 +16,9 @@ def matrice_translation(vecteur_translation):
     ]
 
     for row in matriceT:
-        print("n\--- Matrice de translation---")
         print(row)
-    
+
     return matriceT
-
-
-    
-
 
 def matrice_rotation(vecteur_rotation):
     if len (vecteur_rotation) != 3:
@@ -59,11 +54,12 @@ def matrice_rotation(vecteur_rotation):
     # return matriceRX, matriceRY, matriceRZ
 
 
-    print("n\--- Matrice de rotation---")
-    print("n\Matrice de Rx=", matriceRX)
-    print("n\Matrice de Ry=", matriceRY)
-    print("n\Matrice de Rz=", matriceRZ)
+    print("--- Matrice de rotation---")
+    print("Matrice de Rx=", matriceRX)
+    print("Matrice de Ry=", matriceRY)
+    print("Matrice de Rz=", matriceRZ)
 
+print("Matrice de translation")
 matrice_translation([3, 4, 2])
 matrice_rotation([mt.pi, mt.pi/2, mt.pi/4])
 ###INTERFACE
