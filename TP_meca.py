@@ -71,6 +71,70 @@ def produit_matrice(A, B):
     
     return C
 
+#etape 5
+def position_camera(P):
+    position = [P[0][3], P[1][3], P[2][3]]
+    print("\nPosition caméra :", position)
+    return position
+
+def dessiner_axes(ax, P, etiquette, couleur):
+    origine = [P[0][3], P[1][3], P[2][3]]
+    x_dir = [P[0][0], P[1][0], P[2][0]]
+    y_dir = [P[0][1], P[1][1], P[2][1]]
+    z_dir = [P[0][2], P[1][2], P[2][2]]
+
+    ax.quiver(*origine, *x_dir, color=couleur, arrow_length_ratio=0.1)
+    ax.quiver(*origine, *y_dir, color=couleur, arrow_length_ratio=0.1)
+    ax.quiver(*origine, *z_dir, color=couleur, arrow_length_ratio=0.1)
+
+    ax.text(*(origine[i] + x_dir[i] for i in range(3)), f"{etiquette}_x")
+    ax.text(*(origine[i] + y_dir[i] for i in range(3)), f"{etiquette}_y")
+    ax.text(*(origine[i] + z_dir[i] for i in range(3)), f"{etiquette}_z")
+
+def afficher_world_et_camera(coordonnees_world, C, Pw):
+    print("\n--- Affichage 3D ---")
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111, projection='3d')
+
+    world_x, world_y, world_z = coordonnees_world
+    ax.scatter(world_x, world_y, world_z, c='b', marker='o',label='Coordonnées world', s=54)
+
+    pos_cam = position_camera(C)
+    ax.scatter(*pos_cam, c='r', marker='^', label='Position Caméra', s=54)
+
+    ax.scatter(*Pw, c='b', marker='^', label='Position Pw avion ennemi', s=54)
+    print("Position avion ennemi Pw :", Pw)
+
+    dessiner_axes(ax, C, "C", couleur="red")
+    dessiner_axes(ax, [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], "W",couleur="blue")
+
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_xlim(-4, 4)
+    ax.set_ylim(-4, 4)
+    ax.set_zlim(-4, 4)
+    ax.legend()
+    plt.show() 
+
+def determinant_matrice(M):
+    if len(M) != len(M[0]):
+        raise ValueError("La matrice doit être carrée.")
+    if len(M) == 0:
+        raise ValueError("La matrice ne peut pas être vide.")
+    
+    if len(M) == 1 and len(M[0]) == 1:
+        return M[0][0]
+    elif len(M) == 2 and len(M[0]) == 2:
+        return M[0][0] * M[1][1] - M[0][1] * M[1][0]
+
+    det = 0
+    for j in range(len(M[0])):
+        # Create the submatrix by excluding the i-th row and j-th column
+        submatrix = [row[:j] + row[j+1:] for k, row in enumerate(M) if k != 0]
+        det += ((-1) ** j) * M[0][j] * determinant_matrice(submatrix)
+    
+    return det
 
 ###INTERFACE
 
@@ -98,3 +162,11 @@ B = [
 ]
 produit_matrice(A,B)
 print(" ")
+
+print("Matrice de passage")
+matrice_de_passage = produit_matrice(matrice_translation(T), matrice_rotation(R))
+
+origine_world = (0, 0, 0)
+Pw = [[2],[2],[1]]
+afficher_world_et_camera(origine_world, matrice_de_passage, Pw)
+
