@@ -134,7 +134,24 @@ def determinant_matrice(M):
         submatrix = [row[:j] + row[j+1:] for k, row in enumerate(M) if k != 0]
         det += ((-1) ** j) * M[0][j] * determinant_matrice(submatrix)
     
+    print("Determinant de la matrice de passage :", det)
     return det
+
+#etape 6
+def inverse_matrice(M):
+    if len(M) != len(M[0]):
+        raise ValueError("La matrice doit être carrée.")
+    if len(M) == 0:
+        raise ValueError("La matrice ne peut pas être vide.")
+    
+    det = determinant_matrice(M)
+    if det == 0:
+        raise ValueError("La matrice est non inversible (déterminant nul).")
+    
+    n = len(M)
+    
+
+
 
 ###INTERFACE
 
@@ -165,7 +182,18 @@ print(" ")
 
 print("Matrice de passage")
 matrice_de_passage = produit_matrice(matrice_translation(T), matrice_rotation(R))
+print(" ")
 
+
+M = matrice_de_passage
+determinant_matrice(M)
+print(" ")
+
+print("Inverse de la matrice de passage")
+inverse_matrice(M)
+print(" ")
+
+print("Position de la caméra")
 origine_world = (0, 0, 0)
 Pw = [[2],[2],[1]]
 afficher_world_et_camera(origine_world, matrice_de_passage, Pw)
